@@ -1,0 +1,33 @@
+version: '3.5'
+services:
+  GMAN:
+    image: dockermatrix123/matrix:matrix
+    container_name: matrix
+    stdin_open: true
+    tty: true
+    networks:
+      extnetwork:
+        ipv4_address: 10.0.75.2
+  EXP:
+    image: dockermatrix123/matrix:man
+    container_name: explore
+    privileged: true
+    environment:
+      IP: 10.0.75.2
+    ports:
+      - 3012:3000
+      - 8011:80
+    depends_on:
+      - GMAN
+    deploy:
+      update_config:
+        delay: 10s
+    stdin_open: true
+    tty: true
+    networks:
+      extnetwork:
+networks:
+  extnetwork:
+    ipam:
+      config:
+      - subnet: 10.0.75.0/24
